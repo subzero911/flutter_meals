@@ -9,6 +9,7 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
+  final Function removeItem;
 
   MealItem({
     @required this.id,
@@ -17,28 +18,29 @@ class MealItem extends StatelessWidget {
     @required this.duration,
     @required this.complexity,
     @required this.affordability,
+    this.removeItem,
   });
 
   String get complexityText {
     switch (complexity){
       case Complexity.Simple:
-        return "Simple";      
+        return "Simple";
       case Complexity.Challenging:
         return "Challenging";
       case Complexity.Hard:
         return "Hard";
       default:
         return "Unknown";
-    }        
+    }
   }
 
   String get affordabilityText {
     switch (affordability) {
       case Affordability.Affordable:
-        return "Affordable";        
-      case Affordability.Pricey:        
+        return "Affordable";
+      case Affordability.Pricey:
         return "Pricey";
-      case Affordability.Luxurious:        
+      case Affordability.Luxurious:
         return "Luxurious";
       default:
         return "Unknown";
@@ -101,7 +103,7 @@ class MealItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,                
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
@@ -127,7 +129,7 @@ class MealItem extends StatelessWidget {
                 ],
               ),
             ),
-          ],          
+          ],
         ),
       ),
     );
