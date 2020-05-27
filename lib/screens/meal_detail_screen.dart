@@ -64,7 +64,7 @@ class MealDetailScreen extends StatelessWidget {
         slivers: <Widget>[
           _buildAppBar(selectedMeal),
           SliverList(
-            delegate: SliverChildListDelegate([
+            delegate: SliverChildListDelegate.fixed([
               //_buildHeaderImage(selectedMeal),
               _buildSectionTitle(context, 'Ingredients'),
               _buildChips(context, selectedMeal),
@@ -73,6 +73,7 @@ class MealDetailScreen extends StatelessWidget {
           ),
           SliverFillRemaining(            
             child: Container(
+              height: 300,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.grey),
