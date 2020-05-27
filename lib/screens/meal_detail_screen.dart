@@ -8,6 +8,17 @@ class MealDetailScreen extends StatelessWidget {
   final Function isFavorite;
   MealDetailScreen(this.toggleFavorite, this.isFavorite);
 
+  Widget _buildHeaderImage(selectedMeal) {
+    return Container(
+      width: double.infinity,
+      height: 300,
+      child: Image.network(
+        selectedMeal.imageUrl,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
   Widget _buildSectionTitle(BuildContext context, String text) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -18,9 +29,29 @@ class MealDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContainer(Widget child) {
-    return Container(
-      height: 300,
+  Widget _buildChips(context, selectedMeal) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Wrap(
+        direction: Axis.horizontal,
+        spacing: 10,
+        children: <Widget>[
+          for (var ingredient in selectedMeal.ingredients)
+            Chip(
+              backgroundColor: Theme.of(context).accentColor,
+              label: Text(
+                ingredient,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepsContainer(Widget child) {
+    return Container(      
+      height: 250,
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -42,31 +73,11 @@ class MealDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 300,
-              child: Image.network(
-                selectedMeal.imageUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
+            _buildHeaderImage(selectedMeal),
             _buildSectionTitle(context, 'Ingredients'),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: Wrap(
-                direction: Axis.horizontal,
-                spacing: 10,
-                children: <Widget>[
-                  for (var ingredient in selectedMeal.ingredients)
-                    Chip(
-                      backgroundColor: Theme.of(context).accentColor,
-                      label: Text(ingredient, style: TextStyle(fontWeight: FontWeight.bold),),
-                    ),
-                ],
-              ),
-            ),
+            _buildChips(context, selectedMeal),
             _buildSectionTitle(context, 'Steps'),
-            _buildContainer(
+            _buildStepsContainer(
               ListView.builder(                
                 itemCount: selectedMeal.steps.length,
                 itemBuilder: (ctx, index) => Column(
@@ -90,7 +101,7 @@ class MealDetailScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(isFavorite(mealId) ? Icons.star : Icons.star_border),
         onPressed: () => toggleFavorite(mealId),
-          //Navigator.of(context).pop(mealId);
+        //Navigator.of(context).pop(mealId);
       ),
     );
   }
