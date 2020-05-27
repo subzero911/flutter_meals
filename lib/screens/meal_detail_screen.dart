@@ -22,6 +22,7 @@ class MealDetailScreen extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String text) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
+      alignment: Alignment.center,
       child: Text(
         text,
         style: Theme.of(context).textTheme.headline6,
@@ -32,25 +33,27 @@ class MealDetailScreen extends StatelessWidget {
   Widget _buildChips(context, selectedMeal) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Wrap(
-        direction: Axis.horizontal,
-        spacing: 10,
-        children: <Widget>[
-          for (var ingredient in selectedMeal.ingredients)
-            Chip(
-              backgroundColor: Theme.of(context).accentColor,
-              label: Text(
-                ingredient,
-                style: TextStyle(fontWeight: FontWeight.bold),
+      child: Center(
+        child: Wrap(
+          direction: Axis.horizontal,
+          spacing: 10,
+          children: <Widget>[
+            for (var ingredient in selectedMeal.ingredients)
+              Chip(
+                backgroundColor: Theme.of(context).accentColor,
+                label: Text(
+                  ingredient,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildStepsContainer(Widget child) {
-    return Container(      
+    return Container(
       height: 250,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -69,16 +72,38 @@ class MealDetailScreen extends StatelessWidget {
     final mealId = ModalRoute.of(context).settings.arguments as String;
     final selectedMeal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
     return Scaffold(
-      appBar: AppBar(title: Text('${selectedMeal.title}')),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            _buildHeaderImage(selectedMeal),
-            _buildSectionTitle(context, 'Ingredients'),
-            _buildChips(context, selectedMeal),
-            _buildSectionTitle(context, 'Steps'),
-            _buildStepsContainer(
-              ListView.builder(                
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 300,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                selectedMeal.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            pinned: true,
+            title: Text('${selectedMeal.title}'),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              //_buildHeaderImage(selectedMeal),
+              _buildSectionTitle(context, 'Ingredients'),
+              _buildChips(context, selectedMeal),
+              _buildSectionTitle(context, 'Steps'),
+            ]),
+          ),
+          SliverFillRemaining(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
+              child: ListView.builder(                
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: selectedMeal.steps.length,
                 itemBuilder: (ctx, index) => Column(
                   children: <Widget>[
@@ -95,8 +120,8 @@ class MealDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(isFavorite(mealId) ? Icons.star : Icons.star_border),
