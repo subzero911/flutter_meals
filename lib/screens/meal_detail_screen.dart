@@ -8,14 +8,17 @@ class MealDetailScreen extends StatelessWidget {
   final Function isFavorite;
   MealDetailScreen(this.toggleFavorite, this.isFavorite);
 
-  Widget _buildHeaderImage(selectedMeal) {
-    return Container(
-      width: double.infinity,
-      height: 300,
-      child: Image.network(
-        selectedMeal.imageUrl,
-        fit: BoxFit.cover,
+  Widget _buildAppBar(selectedMeal) {
+    return SliverAppBar(
+      expandedHeight: 300,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Image.network(
+          selectedMeal.imageUrl,
+          fit: BoxFit.cover,
+        ),
       ),
+      pinned: true,
+      title: Text('${selectedMeal.title}'),
     );
   }
 
@@ -52,21 +55,6 @@ class MealDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStepsContainer(Widget child) {
-    return Container(
-      height: 250,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
-      child: child,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context).settings.arguments as String;
@@ -74,17 +62,7 @@ class MealDetailScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            expandedHeight: 300,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                selectedMeal.imageUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
-            pinned: true,
-            title: Text('${selectedMeal.title}'),
-          ),
+          _buildAppBar(selectedMeal),
           SliverList(
             delegate: SliverChildListDelegate([
               //_buildHeaderImage(selectedMeal),
@@ -102,21 +80,17 @@ class MealDetailScreen extends StatelessWidget {
               ),
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
-              child: ListView.builder(                
+              child: ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: selectedMeal.steps.length,
-                itemBuilder: (ctx, index) => Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: CircleAvatar(
-                        child: Text('# ${(index + 1)}'),
-                      ),
-                      title: Text(
-                        selectedMeal.steps[index],
-                      ),
-                    ),
-                    Divider(),
-                  ],
+                separatorBuilder: (ctx, index) => Divider(),
+                itemBuilder: (ctx, index) => ListTile(
+                  leading: CircleAvatar(
+                    child: Text('# ${(index + 1)}'),
+                  ),
+                  title: Text(
+                    selectedMeal.steps[index],
+                  ),
                 ),
               ),
             ),
