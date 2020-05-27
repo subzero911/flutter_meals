@@ -8,20 +8,20 @@ class MealDetailScreen extends StatelessWidget {
   final Function isFavorite;
   MealDetailScreen(this.toggleFavorite, this.isFavorite);
 
-  Widget buildSectionTitle(BuildContext context, String text) {
+  Widget _buildSectionTitle(BuildContext context, String text) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.title,
+        style: Theme.of(context).textTheme.headline6,
       ),
     );
   }
 
-  Widget buildContainer(Widget child) {
+  Widget _buildContainer(Widget child) {
     return Container(
-      height: 150,
-      width: 300,
+      height: 300,
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
@@ -50,7 +50,7 @@ class MealDetailScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            buildSectionTitle(context, 'Ingredients'),
+            _buildSectionTitle(context, 'Ingredients'),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Wrap(
@@ -65,9 +65,9 @@ class MealDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
-            buildSectionTitle(context, 'Steps'),
-            buildContainer(
-              ListView.builder(
+            _buildSectionTitle(context, 'Steps'),
+            _buildContainer(
+              ListView.builder(                
                 itemCount: selectedMeal.steps.length,
                 itemBuilder: (ctx, index) => Column(
                   children: <Widget>[
