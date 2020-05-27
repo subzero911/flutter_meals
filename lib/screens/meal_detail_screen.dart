@@ -72,8 +72,7 @@ class MealDetailScreen extends StatelessWidget {
             ]),
           ),
           SliverFillRemaining(            
-            child: Container(
-              height: 300,
+            child: Container(              
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.grey),
