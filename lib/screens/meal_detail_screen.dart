@@ -71,7 +71,7 @@ class MealDetailScreen extends StatelessWidget {
               _buildSectionTitle(context, 'Steps'),
             ]),
           ),
-          SliverFillRemaining(            
+          SliverToBoxAdapter(            
             child: Container(              
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -80,7 +80,8 @@ class MealDetailScreen extends StatelessWidget {
               ),
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ListView.separated(                
+              child: ListView.separated(  
+                shrinkWrap: true,              
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: selectedMeal.steps.length,
                 separatorBuilder: (ctx, index) => Divider(),
